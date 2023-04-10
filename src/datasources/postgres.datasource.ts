@@ -3,14 +3,19 @@ import {DataSource} from "typeorm";
 import {Logger} from "@tsed/logger";
 
 export const POSTGRES_DATA_SOURCE = Symbol.for("PostgresDataSource");
+
 export const PostgresDataSource = new DataSource({
   type: "postgres",
-  entities: [],
   host: "localhost",
   port: 5432,
   username: "postgres",
   password: "root",
-  database: "postgres"
+  synchronize:false,
+  database: "demo-app",
+  migrationsRun: true,
+  migrationsTableName: 'migrations',
+  entities: entitiesPathsFor(),
+  migrations: migrationsPathsFor()
 });
 
 registerProvider<DataSource>({
@@ -30,3 +35,16 @@ registerProvider<DataSource>({
     }
   }
 });
+
+function entitiesPathsFor() {
+
+  return ['src/models/*.ts'];
+  
+}
+  
+
+function migrationsPathsFor() {
+
+  return ['src/migrations/**/*.ts'];
+
+}
